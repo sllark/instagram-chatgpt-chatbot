@@ -1,0 +1,5 @@
+.env
+logged-in-user.json
+user-state.json
+output.json
+node_modules/
