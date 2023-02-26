@@ -20,8 +20,8 @@ export async function login(ig: IgApiClient) {
       await newLoginRequest(ig)
     })
     .catch(IgCheckpointError, async () => {
-      console.log(ig.state.checkpoint) // Checkpoint info here
-      console.log(ig.state.challengeUrl)
+      // console.log(ig.state.checkpoint) // Checkpoint info here
+      // console.log(ig.state.challengeUrl)
       // await ig.challenge.auto(true) // Requesting sms-code or click "It was me" button
       // console.log(ig.state.checkpoint) // Challenge info here
       // console.log(await ig.challenge.sendSecurityCode(code))

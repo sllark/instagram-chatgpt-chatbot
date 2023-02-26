@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { IgApiClient, AccountRepositoryLoginResponseLogged_in_user } from 'instagram-private-api'
 import mongoose from 'mongoose'
-import { login, replyUnreadMessages } from './instagram/helpers'
+import { login, replyUnreadMessages, messageAllInbox } from './instagram/helpers'
 
 const ig = new IgApiClient()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,7 +12,7 @@ const startApp = async () => {
   // loggedInUser = await getLoggedInUser()
 
   await replyUnreadMessages(ig)
-  // await messageAllInbox(ig)
+  await messageAllInbox(ig)
 }
 
 mongoose.connect(process.env.MONGOURI || '', async function (error) {

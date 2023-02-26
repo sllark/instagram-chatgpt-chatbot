@@ -6,7 +6,7 @@ export const messageAllInbox = async (ig: IgApiClient) => {
 
   for (const thread of inbox) {
     const user = await getThreadUser(thread)
-    const message = `Good Bye ${user.messageCount > 0 ? '#' + (+user.messageCount + 1) : ''}`
+    const message = `Good Night Queen ❤ ${user.messageCount > 0 ? '#' + (+user.messageCount + 1) : ''}`
     await sendMessage(thread, message)
     user.messageCount = +user.messageCount + 1
     await user.save()
