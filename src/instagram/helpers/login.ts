@@ -8,6 +8,7 @@ import {
 import { saveData } from './saveData'
 import { setUserState } from './setUserState'
 import Bluebird from 'bluebird'
+import { verificationChallenge } from './verificationChallenge'
 
 export async function login(ig: IgApiClient) {
   await setUserState(ig)
@@ -20,21 +21,23 @@ export async function login(ig: IgApiClient) {
       await newLoginRequest(ig)
     })
     .catch(IgCheckpointError, async () => {
-      // console.log(ig.state.checkpoint) // Checkpoint info here
-      // console.log(ig.state.challengeUrl)
-      // await ig.challenge.auto(true) // Requesting sms-code or click "It was me" button
-      // console.log(ig.state.checkpoint) // Challenge info here
-      // console.log(await ig.challenge.sendSecurityCode(code))
+      await verificationChallenge(ig)
     })
     .catch((e) => console.log('Could not resolve checkpoint:', e, e.stack))
 }
 
 export async function newLoginRequest(ig: IgApiClient) {
-  ig.state.generateDevice(process.env.IG_USERNAME || '')
-  const loggedInUser = await ig.account.login(process.env.IG_USERNAME || '', process.env.IG_PASSWORD || '')
-  const state = await ig.state.serialize()
-  await saveData(state, UserState)
-  await saveData(loggedInUser, LoggedInUser)
+  Bluebird.try(async () => {
+    ig.state.generateDevice(process.env.IG_USERNAME || '')
+    const loggedInUser = await ig.account.login(process.env.IG_USERNAME || '', process.env.IG_PASSWORD || '')
+    const state = await ig.state.serialize()
+    await saveData(state, UserState)
+    await saveData(loggedInUser, LoggedInUser)
+  })
+    .catch(IgCheckpointError, async () => {
+      await verificationChallenge(ig)
+    })
+    .catch((e) => console.log('Could not resolve checkpoint:', e, e.stack))
 }
 
 export const getLoggedInUser = async (): Promise<AccountRepositoryLoginResponseLogged_in_user | null> => {

@@ -1,18 +1,24 @@
 import 'dotenv/config'
-import { IgApiClient, AccountRepositoryLoginResponseLogged_in_user } from 'instagram-private-api'
+import { IgApiClient, IgCheckpointError } from 'instagram-private-api'
 import mongoose from 'mongoose'
-import { login, replyUnreadMessages, messageAllInbox } from './instagram/helpers'
+import { login, replyUnreadMessages, messageAllInbox, verificationChallenge } from './instagram/helpers'
+import Bluebird from 'bluebird'
+
+mongoose.set('strictQuery', false)
 
 const ig = new IgApiClient()
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-let loggedInUser: AccountRepositoryLoginResponseLogged_in_user | null
 
 const startApp = async () => {
   await login(ig)
-  // loggedInUser = await getLoggedInUser()
 
-  await replyUnreadMessages(ig)
-  await messageAllInbox(ig)
+  Bluebird.try(async () => {
+    // await replyUnreadMessages(ig)
+    await messageAllInbox(ig)
+  })
+    .catch(IgCheckpointError, async () => {
+      await verificationChallenge(ig)
+    })
+    .catch((e) => console.log('Could not resolve checkpoint:', e, e.stack))
 }
 
 mongoose.connect(process.env.MONGOURI || '', async function (error) {

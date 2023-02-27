@@ -10,7 +10,7 @@ const userSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  messageCount: { type: Schema.Types.Number, default: 0 },
+  messageCount: { type: Schema.Types.Number, default: 1 },
 })
 
 export const User = model<IUser>('User', userSchema)
