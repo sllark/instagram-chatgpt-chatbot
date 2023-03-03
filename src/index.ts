@@ -11,7 +11,7 @@ const ig = new IgApiClient()
 const startApp = async () => {
   await login(ig)
 
-  Bluebird.try(async () => {
+  return Bluebird.try(async () => {
     await replyUnreadMessages(ig)
     await messageAllInbox(ig)
   })
@@ -29,4 +29,5 @@ mongoose.connect(process.env.MONGOURI || '', async function (error) {
 
   console.log('connection established')
   await startApp()
+  process.exit(0)
 })
