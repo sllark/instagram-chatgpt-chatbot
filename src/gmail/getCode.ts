@@ -18,9 +18,9 @@ export const getCode = async () => {
 
     if (response.data && response.data.messages && response.data.messages[0]) {
       const code = await ExtractCodeFromMessage(response.data.messages[0]?.id, token)
-      if (code) {
-        await TrashMessage(response.data.messages[0]?.id, token)
-      }
+      // if (code) {
+      //   await TrashMessage(response.data.messages[0]?.id, token)
+      // }
 
       return code
     } else return 0

@@ -21,6 +21,7 @@ export async function login(ig: IgApiClient) {
       await newLoginRequest(ig)
     })
     .catch(IgCheckpointError, async () => {
+      console.log('================== error: checkpoint_required, regular_login ========================')
       await verificationChallenge(ig)
     })
     .catch((e) => console.log('Could not resolve checkpoint:', e, e.stack))
@@ -35,6 +36,7 @@ export async function newLoginRequest(ig: IgApiClient) {
     await saveData(loggedInUser, LoggedInUser)
   })
     .catch(IgCheckpointError, async () => {
+      console.log('================== error: checkpoint_required, new_login ========================')
       await verificationChallenge(ig)
     })
     .catch((e) => console.log('Could not resolve checkpoint:', e, e.stack))

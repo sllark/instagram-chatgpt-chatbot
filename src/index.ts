@@ -12,7 +12,7 @@ const startApp = async () => {
   await login(ig)
 
   Bluebird.try(async () => {
-    // await replyUnreadMessages(ig)
+    await replyUnreadMessages(ig)
     await messageAllInbox(ig)
   })
     .catch(IgCheckpointError, async () => {
