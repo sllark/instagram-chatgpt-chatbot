@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserState = void 0;
+var mongoose_1 = require("mongoose");
+var userStateSchema = new mongoose_1.Schema({
+    data: {
+        type: mongoose_1.Schema.Types.String,
+        get: function (data) {
+            try {
+                return JSON.parse(data);
+            }
+            catch (error) {
+                return data;
+            }
+        },
+        set: function (data) {
+            return typeof data === 'string' ? data : JSON.stringify(data);
+        },
+    },
+});
+exports.UserState = (0, mongoose_1.model)('UserState', userStateSchema);
