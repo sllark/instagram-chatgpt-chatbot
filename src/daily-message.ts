@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { IgApiClient, IgCheckpointError } from 'instagram-private-api'
 import mongoose from 'mongoose'
-import { login, replyUnreadMessages, verificationChallenge } from './instagram/helpers'
+import { login, messageAllInbox, verificationChallenge } from './instagram/helpers'
 import Bluebird from 'bluebird'
 
 mongoose.set('strictQuery', false)
@@ -13,7 +13,7 @@ const startApp = async () => {
   await login(ig)
 
   return Bluebird.try(async () => {
-    await replyUnreadMessages(ig)
+    await messageAllInbox(ig)
   })
     .catch(IgCheckpointError, async () => {
       await verificationChallenge(ig)

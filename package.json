@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node build/index.js",
-    "build": "rimraf ./build && tsc",
+    "build": "rimraf ./build && tsc --skipLibCheck",
     "start:dev": "nodemon --exec \"node --inspect=0.0.0.0:9229 --require ts-node/register ./src/index.ts\"",
     "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix"
+    "format": "eslint src/**/*.ts --fix",
+    "daily-message": "npm run build && node build/daily-message.js",
+    "reply-unread": "npm run build && node build/index.js"
   },
   "keywords": [],
   "author": "",
