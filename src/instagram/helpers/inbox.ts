@@ -14,7 +14,15 @@ export const messageAllInbox = async (ig: IgApiClient) => {
 }
 
 export const getInbox = async (ig: IgApiClient) => {
-  return await ig.feed.directInbox().records()
+  const chatFeed = ig.feed.directInbox()
+  const inbox: DirectThreadEntity[] = [...(await chatFeed.records())]
+
+  while (chatFeed.isMoreAvailable()) {
+    const records = await chatFeed.records()
+    inbox.push(...records)
+  }
+
+  return inbox
 }
 
 export const sendMessage = async (thread: DirectThreadEntity, message: string) => {

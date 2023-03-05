@@ -35,6 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.replyUnreadMessages = exports.getThreadUser = exports.sendMessage = exports.getInbox = exports.messageAllInbox = void 0;
 var models_1 = require("../../models");
@@ -71,10 +80,24 @@ var messageAllInbox = function (ig) { return __awaiter(void 0, void 0, void 0, f
 }); };
 exports.messageAllInbox = messageAllInbox;
 var getInbox = function (ig) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, ig.feed.directInbox().records()];
-            case 1: return [2 /*return*/, _a.sent()];
+    var chatFeed, inbox, _a, records;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                chatFeed = ig.feed.directInbox();
+                _a = [[]];
+                return [4 /*yield*/, chatFeed.records()];
+            case 1:
+                inbox = __spreadArray.apply(void 0, _a.concat([(_b.sent()), true]));
+                _b.label = 2;
+            case 2:
+                if (!chatFeed.isMoreAvailable()) return [3 /*break*/, 4];
+                return [4 /*yield*/, chatFeed.records()];
+            case 3:
+                records = _b.sent();
+                inbox.push.apply(inbox, records);
+                return [3 /*break*/, 2];
+            case 4: return [2 /*return*/, inbox];
         }
     });
 }); };
